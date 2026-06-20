@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { track } from "@vercel/analytics";
 import { Leaderboard } from "@/components/Leaderboard";
 import { LoadingSequence } from "@/components/LoadingSequence";
 import { ResultView } from "@/components/ResultView";
@@ -18,9 +19,15 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   const generate = useCallback(
-    async (raw: string, opts: { push?: boolean } = {}) => {
+    async (
+      raw: string,
+      opts: { push?: boolean; source?: string } = {},
+    ) => {
       const value = raw.trim();
       if (!value) return;
+
+      // Analytics: record every lookup with where it came from.
+      track("generate_card", { query: value, source: opts.source ?? "input" });
 
       // Push a history entry so the browser back button returns to the landing.
       if (opts.push !== false) {
@@ -60,7 +67,7 @@ export default function Home() {
       const u = new URLSearchParams(window.location.search).get("u");
       if (u) {
         setInput(u);
-        generate(u, { push: false });
+        generate(u, { push: false, source: "deeplink" });
       } else {
         setData(null);
         setQuery("");
@@ -147,7 +154,9 @@ export default function Home() {
 
       {error && <div className="error">⚠ {error}</div>}
 
-      <Leaderboard onPick={generate} />
+      <Leaderboard
+        onPick={(u) => generate(u, { source: "leaderboard" })}
+      />
     </main>
   );
 }
