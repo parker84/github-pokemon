@@ -322,27 +322,26 @@ body {
   box-shadow:
     0 0 0 4px var(--bg),
     0 0 32px rgba(57, 211, 83, 0.3);
-  padding: 26px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 11px;
   text-align: center;
 }
 .card-head {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   align-items: center;
   border-bottom: 3px solid var(--track);
-  padding-bottom: 18px;
+  padding-bottom: 11px;
 }
 .card-head .avatar {
   border: 4px solid var(--green);
   box-shadow: 0 0 14px rgba(57, 211, 83, 0.5);
-  margin-bottom: 4px;
 }
 .card-head .name {
-  font-size: 22px;
+  font-size: 18px;
   color: var(--text);
   text-shadow: 0 0 8px rgba(57, 211, 83, 0.5);
   word-break: break-word;
@@ -377,7 +376,7 @@ body {
 .bars {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 7px;
 }
 .bar-row {
   display: grid;
@@ -400,7 +399,7 @@ body {
   white-space: nowrap;
 }
 .bar-track {
-  height: 15px;
+  height: 11px;
   background: var(--track);
   border: 2px solid var(--panel-inset);
   position: relative;
@@ -413,7 +412,7 @@ body {
 
 .card-foot {
   border-top: 3px solid var(--track);
-  padding-top: 18px;
+  padding-top: 11px;
   font-size: 9px;
   color: var(--green);
   letter-spacing: 1px;
@@ -479,17 +478,17 @@ body {
 /* ---------- in-card sections ---------- */
 .card-bio {
   font-size: 9px;
-  line-height: 1.9;
+  line-height: 1.7;
   color: var(--text-dim);
   text-align: center;
 }
 .card-section {
   border-top: 3px solid var(--track);
-  padding-top: 16px;
+  padding-top: 11px;
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 9px;
 }
 .card-section-title {
   font-size: 9px;
@@ -502,7 +501,7 @@ body {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  gap: 8px;
 }
 .repo-name {
   font-size: 9px;
@@ -536,7 +535,7 @@ body {
 .badge {
   border: 2px solid;
   background: var(--panel-inset);
-  padding: 8px 10px;
+  padding: 7px 9px;
   display: flex;
   align-items: center;
   gap: 7px;

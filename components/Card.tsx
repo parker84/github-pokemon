@@ -16,8 +16,8 @@ export const Card = forwardRef<HTMLDivElement, { data: CardData }>(
         <div className="card-head">
           <PixelAvatar
             src={data.avatarUrl}
-            size={96}
-            pixels={64}
+            size={72}
+            pixels={56}
             levels={12}
             className="avatar"
           />
