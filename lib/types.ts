@@ -6,6 +6,17 @@ export interface LanguageStat {
   color: string;
 }
 
+export interface Achievement {
+  /** Short badge label, e.g. "POLYGLOT" */
+  name: string;
+  /** One-line description of how it was earned */
+  desc: string;
+  /** Emoji icon */
+  icon: string;
+  /** Accent hex color */
+  color: string;
+}
+
 export interface StatBar {
   /** Display label, e.g. "STARS" */
   name: string;
@@ -24,6 +35,8 @@ export interface CardData {
   name: string;
   avatarUrl: string;
   profileUrl: string;
+  /** GitHub bio, if any */
+  bio: string | null;
 
   /** Derived class line, e.g. "TYPESCRIPT WIZARD" */
   className: string;
@@ -50,6 +63,12 @@ export interface CardData {
 
   /** Varied GitHub stat dimensions rendered as the card's bars */
   statBars: StatBar[];
+
+  /** Most-starred repos for the "TOP REPOS" section */
+  topRepos: RepoSummary[];
+
+  /** Earned achievement badges */
+  achievements: Achievement[];
 }
 
 export interface RepoSummary {

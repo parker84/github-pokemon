@@ -1,3 +1,4 @@
+import { deriveAchievements } from "./achievements";
 import { fetchContributions, fetchGitHubProfile } from "./github";
 import {
   computeLevel,
@@ -21,6 +22,7 @@ export async function buildCardData(username: string): Promise<CardData> {
       topRepoStars,
       languageCount,
       ownedCount,
+      topRepos,
       languages,
     },
     contributions,
@@ -36,6 +38,8 @@ export async function buildCardData(username: string): Promise<CardData> {
     contributions,
   });
   const percentile = computePercentile(power);
+  const accountAgeYears =
+    (Date.now() - new Date(user.created_at).getTime()) / YEAR_MS;
 
   const statBars = buildStatBars({
     totalStars,
@@ -48,7 +52,18 @@ export async function buildCardData(username: string): Promise<CardData> {
     topRepoStars,
     languageCount,
     ownedCount,
-    accountAgeYears: (Date.now() - new Date(user.created_at).getTime()) / YEAR_MS,
+    accountAgeYears,
+  });
+
+  const achievements = deriveAchievements({
+    totalStars,
+    followers: user.followers,
+    publicRepos: user.public_repos,
+    contributions,
+    totalForks,
+    topRepoStars,
+    languageCount,
+    accountAgeYears,
   });
 
   return {
@@ -56,6 +71,7 @@ export async function buildCardData(username: string): Promise<CardData> {
     name: user.name ?? user.login,
     avatarUrl: user.avatar_url,
     profileUrl: user.html_url,
+    bio: user.bio,
     className: deriveClassName(languages, percentile),
     type: deriveType(languages),
     level: computeLevel(power),
@@ -70,5 +86,7 @@ export async function buildCardData(username: string): Promise<CardData> {
     },
     languages,
     statBars,
+    topRepos,
+    achievements,
   };
 }

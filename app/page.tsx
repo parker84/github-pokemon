@@ -136,6 +136,15 @@ export default function Home() {
         </button>
       </form>
 
+      <a
+        className="learn-more"
+        href="https://github.com/parker84/github-pokemon"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        LEARN MORE
+      </a>
+
       {error && <div className="error">⚠ {error}</div>}
 
       <Leaderboard onPick={generate} />
