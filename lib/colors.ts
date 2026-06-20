@@ -1,0 +1,58 @@
+// Subset of GitHub Linguist language colors (github/linguist colors.yml).
+// Falls back to a neon green when a language isn't listed.
+export const LANGUAGE_COLORS: Record<string, string> = {
+  JavaScript: "#f1e05a",
+  TypeScript: "#3178c6",
+  Python: "#3572A5",
+  Java: "#b07219",
+  "C++": "#f34b7d",
+  C: "#555555",
+  "C#": "#178600",
+  Go: "#00ADD8",
+  Rust: "#dea584",
+  Ruby: "#701516",
+  PHP: "#4F5D95",
+  Swift: "#F05138",
+  Kotlin: "#A97BFF",
+  Dart: "#00B4AB",
+  Scala: "#c22d40",
+  Shell: "#89e051",
+  HTML: "#e34c26",
+  CSS: "#563d7c",
+  SCSS: "#c6538c",
+  Vue: "#41b883",
+  Svelte: "#ff3e00",
+  Elixir: "#6e4a7e",
+  Erlang: "#B83998",
+  Haskell: "#5e5086",
+  Clojure: "#db5855",
+  Lua: "#000080",
+  Perl: "#0298c3",
+  R: "#198CE7",
+  Julia: "#a270ba",
+  "Objective-C": "#438eff",
+  Zig: "#ec915c",
+  Nix: "#7e7eff",
+  Solidity: "#AA6746",
+  Jupyter: "#DA5B0B",
+  "Jupyter Notebook": "#DA5B0B",
+  Dockerfile: "#384d54",
+  Makefile: "#427819",
+  PowerShell: "#012456",
+  Assembly: "#6E4C13",
+  OCaml: "#3be133",
+  "F#": "#b845fc",
+  Crystal: "#000100",
+  Nim: "#ffc200",
+  Vala: "#a56de2",
+  CoffeeScript: "#244776",
+  TeX: "#3D6117",
+  Vim: "#199f4b",
+  "Emacs Lisp": "#c065db",
+};
+
+export const FALLBACK_COLOR = "#39d353";
+
+export function colorForLanguage(name: string): string {
+  return LANGUAGE_COLORS[name] ?? FALLBACK_COLOR;
+}

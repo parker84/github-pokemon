@@ -1,0 +1,79 @@
+export interface LanguageStat {
+  name: string;
+  /** Share of total analyzed bytes, 0..1 */
+  share: number;
+  /** Hex color (with leading #) from GitHub Linguist, or a fallback */
+  color: string;
+}
+
+export interface Achievement {
+  /** Short badge label, e.g. "POLYGLOT" */
+  name: string;
+  /** One-line description of how it was earned */
+  desc: string;
+  /** Emoji icon */
+  icon: string;
+  /** Accent hex color */
+  color: string;
+}
+
+export interface StatBar {
+  /** Display label, e.g. "STARS" */
+  name: string;
+  /** Raw value (for tooltips / future labels) */
+  value: number;
+  /** Bar fill, 0..1 (normalized magnitude) */
+  share: number;
+  /** Hex color (with leading #) */
+  color: string;
+}
+
+export interface CardData {
+  /** GitHub login / handle (without @) */
+  username: string;
+  /** Display name, falls back to username */
+  name: string;
+  avatarUrl: string;
+  profileUrl: string;
+  /** GitHub bio, if any */
+  bio: string | null;
+
+  /** Derived class line, e.g. "TYPESCRIPT WIZARD" */
+  className: string;
+  /** Pokemon-style elemental type derived from dominant language */
+  type: string;
+  level: number;
+
+  /** Composite power score */
+  power: number;
+  /** 0..100 percentile-ish rank (higher = rarer) */
+  percentile: number;
+
+  /** Raw stats used for the score + flavor */
+  stats: {
+    followers: number;
+    following: number;
+    publicRepos: number;
+    totalStars: number;
+    contributions: number | null;
+  };
+
+  /** Top languages, sorted desc by share, capped to ~10 */
+  languages: LanguageStat[];
+
+  /** Varied GitHub stat dimensions rendered as the card's bars */
+  statBars: StatBar[];
+
+  /** Most-starred repos for the "TOP REPOS" section */
+  topRepos: RepoSummary[];
+
+  /** Earned achievement badges */
+  achievements: Achievement[];
+}
+
+export interface RepoSummary {
+  name: string;
+  description: string | null;
+  stars: number;
+  language: string | null;
+}
