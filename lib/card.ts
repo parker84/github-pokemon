@@ -1,5 +1,4 @@
 import { fetchContributions, fetchGitHubProfile } from "./github";
-import { generateOracle } from "./oracle";
 import {
   computeLevel,
   computePercentile,
@@ -11,7 +10,7 @@ import type { CardData } from "./types";
 
 /** Build the full card payload for a username. Framework-agnostic. */
 export async function buildCardData(username: string): Promise<CardData> {
-  const [{ user, totalStars, topRepos, languages }, contributions] =
+  const [{ user, totalStars, languages }, contributions] =
     await Promise.all([
       fetchGitHubProfile(username),
       fetchContributions(username),
@@ -24,16 +23,6 @@ export async function buildCardData(username: string): Promise<CardData> {
     contributions,
   });
   const percentile = computePercentile(power);
-
-  const oracle = await generateOracle({
-    username: user.login,
-    name: user.name ?? user.login,
-    bio: user.bio,
-    followers: user.followers,
-    totalStars,
-    languages,
-    topRepos,
-  });
 
   return {
     username: user.login,
@@ -52,7 +41,6 @@ export async function buildCardData(username: string): Promise<CardData> {
       totalStars,
       contributions,
     },
-    oracle,
     languages,
   };
 }

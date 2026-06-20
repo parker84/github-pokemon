@@ -54,7 +54,7 @@ export function Leaderboard({
               }
             >
               {e ? (
-                <PixelAvatar src={e.avatarUrl} size={96} pixels={36} />
+                <PixelAvatar src={e.avatarUrl} size={96} pixels={52} levels={12} />
               ) : (
                 <span className="lb-skeleton" />
               )}

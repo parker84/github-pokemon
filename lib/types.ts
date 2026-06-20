@@ -34,9 +34,6 @@ export interface CardData {
     contributions: number | null;
   };
 
-  /** Flavor text block ("THE ORACLE SAYS ...") */
-  oracle: string;
-
   /** Top languages, sorted desc by share, capped to ~10 */
   languages: LanguageStat[];
 }

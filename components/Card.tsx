@@ -12,8 +12,9 @@ export const Card = forwardRef<HTMLDivElement, { data: CardData }>(
         <div className="card-head">
           <PixelAvatar
             src={data.avatarUrl}
-            size={92}
-            pixels={40}
+            size={96}
+            pixels={64}
+            levels={12}
             className="avatar"
           />
           <div className="name">{data.name.toUpperCase()}</div>
@@ -24,11 +25,6 @@ export const Card = forwardRef<HTMLDivElement, { data: CardData }>(
             <span className="bracket">&gt;</span> {data.power} PWR · TOP{" "}
             {100 - data.percentile}% <span className="bracket">&lt;</span>
           </div>
-        </div>
-
-        <div className="oracle">
-          <span className="label">THE ORACLE SAYS</span>
-          <span className="body">{data.oracle}</span>
         </div>
 
         <div className="bars">

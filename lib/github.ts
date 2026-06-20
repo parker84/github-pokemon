@@ -96,16 +96,20 @@ export async function fetchGitHubProfile(username: string) {
       language: r.language,
     }));
 
-  const languages = await aggregateLanguages(owned);
+  // With a token (5000 req/hr) do the rich byte-level breakdown; without one,
+  // fall back to the free primary-language counts to avoid the 60/hr limit.
+  const languages = process.env.GITHUB_TOKEN
+    ? await aggregateLanguagesByBytes(owned)
+    : aggregateLanguages(owned);
 
   return { user, totalStars, topRepos, languages };
 }
 
 /**
- * Sum byte counts across repos to build a weighted language breakdown.
- * Caps the number of repos we hit to keep within rate limits.
+ * Sum byte counts across the top repos for an accurate, granular breakdown.
+ * Only used when a token is present (it costs one request per repo).
  */
-async function aggregateLanguages(
+async function aggregateLanguagesByBytes(
   repos: GitHubRepo[],
   maxRepos = 30,
 ): Promise<LanguageStat[]> {
@@ -114,13 +118,11 @@ async function aggregateLanguages(
     .slice(0, maxRepos);
 
   const byteTotals = new Map<string, number>();
-
   const results = await Promise.allSettled(
     sample.map((r) =>
       getJson<Record<string, number>>(r.languages_url).catch(() => ({})),
     ),
   );
-
   for (const result of results) {
     if (result.status !== "fulfilled") continue;
     for (const [lang, bytes] of Object.entries(result.value)) {
@@ -129,12 +131,39 @@ async function aggregateLanguages(
   }
 
   const total = [...byteTotals.values()].reduce((a, b) => a + b, 0);
-  if (total === 0) return [];
+  if (total === 0) return aggregateLanguages(repos); // fall back to primary
 
   return [...byteTotals.entries()]
     .map(([name, bytes]) => ({
       name,
       share: bytes / total,
+      color: colorForLanguage(name),
+    }))
+    .sort((a, b) => b.share - a.share)
+    .slice(0, 10);
+}
+
+/**
+ * Build a language breakdown from each repo's PRIMARY language — which the
+ * repos endpoint already returns for free. No per-repo languages_url calls,
+ * so this stays within the rate limit and never returns junk like Procfile.
+ *
+ * Each repo votes once for its primary language; share = vote fraction.
+ */
+function aggregateLanguages(repos: GitHubRepo[]): LanguageStat[] {
+  const counts = new Map<string, number>();
+  for (const r of repos) {
+    if (!r.language) continue;
+    counts.set(r.language, (counts.get(r.language) ?? 0) + 1);
+  }
+
+  const total = [...counts.values()].reduce((a, b) => a + b, 0);
+  if (total === 0) return [];
+
+  return [...counts.entries()]
+    .map(([name, votes]) => ({
+      name,
+      share: votes / total,
       color: colorForLanguage(name),
     }))
     .sort((a, b) => b.share - a.share)

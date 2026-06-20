@@ -7,7 +7,7 @@ const STEPS = [
   "SCANNING REPOS",
   "AGGREGATING LANGUAGES",
   "COMPUTING POWER LEVEL",
-  "CONSULTING THE ORACLE",
+  "MINTING CARD",
 ];
 
 /** Cosmetic terminal readout shown while the card is being built. */
