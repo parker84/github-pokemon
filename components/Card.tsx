@@ -4,7 +4,7 @@ import type { CardData } from "@/lib/types";
 import { Bar } from "./Bar";
 import { PixelAvatar } from "./PixelAvatar";
 
-const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? "GITHUB-POKEMON";
+const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? "GITPOKE.COM";
 
 export const Card = forwardRef<HTMLDivElement, { data: CardData }>(
   function Card({ data }, ref) {
