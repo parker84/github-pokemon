@@ -2,11 +2,13 @@ export function Bar({
   name,
   share,
   color,
+  valueLabel,
   title,
 }: {
   name: string;
   share: number;
   color: string;
+  valueLabel?: string;
   title?: string;
 }) {
   return (
@@ -22,6 +24,7 @@ export function Bar({
           }}
         />
       </span>
+      {valueLabel != null && <span className="bar-value">{valueLabel}</span>}
     </div>
   );
 }

@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import { toPng } from "html-to-image";
 import type { CardData } from "@/lib/types";
 import { Card } from "./Card";
-import { ProfileSections } from "./ProfileSections";
 
 export function ResultView({
   data,
@@ -90,8 +89,6 @@ export function ResultView({
           DOWNLOAD
         </button>
       </div>
-
-      <ProfileSections data={data} />
 
       <button className="btn ghost back" onClick={onReset}>
         ← NEW CARD
