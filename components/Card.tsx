@@ -8,8 +8,11 @@ const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? "GITHUB-POKEMON";
 
 export const Card = forwardRef<HTMLDivElement, { data: CardData }>(
   function Card({ data }, ref) {
-    const languages = data.languages.slice(0, 1);
-    const repos = data.topRepos.slice(0, 3);
+    // Defensive defaults so a stale/partial payload can never crash render.
+    const statBars = data.statBars ?? [];
+    const languages = (data.languages ?? []).slice(0, 1);
+    const repos = (data.topRepos ?? []).slice(0, 3);
+    const achievements = (data.achievements ?? []).slice(0, 3);
 
     return (
       <div className="card" ref={ref}>
@@ -34,7 +37,7 @@ export const Card = forwardRef<HTMLDivElement, { data: CardData }>(
         {data.bio && <p className="card-bio">{data.bio}</p>}
 
         <div className="bars">
-          {data.statBars.map((stat) => (
+          {statBars.map((stat) => (
             <Bar
               key={stat.name}
               name={stat.name}
@@ -84,11 +87,11 @@ export const Card = forwardRef<HTMLDivElement, { data: CardData }>(
           </div>
         )}
 
-        {data.achievements.length > 0 && (
+        {achievements.length > 0 && (
           <div className="card-section">
             <h3 className="card-section-title">ACHIEVEMENTS</h3>
             <div className="badges">
-              {data.achievements.map((a) => (
+              {achievements.map((a) => (
                 <div
                   className="badge"
                   key={a.name}
