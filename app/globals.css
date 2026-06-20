@@ -54,11 +54,18 @@ body {
 }
 
 /* ---------- hero ---------- */
-.kicker {
+.credit {
   font-size: 11px;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   color: var(--cyan);
-  margin-bottom: 22px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin-bottom: 24px;
+  transition: color 0.1s ease, text-shadow 0.1s ease;
+}
+.credit:hover {
+  color: var(--green);
+  text-shadow: 0 0 10px rgba(57, 211, 83, 0.6);
 }
 .headline {
   font-size: clamp(38px, 9vw, 84px);
@@ -98,11 +105,24 @@ body {
 }
 
 .blurb {
-  font-size: 11px;
-  line-height: 2;
-  color: var(--text-dim);
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--text);
+  letter-spacing: 1px;
   max-width: 620px;
+  margin-bottom: 14px;
+}
+.learn-more {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-decoration: underline;
+  text-underline-offset: 4px;
   margin-bottom: 18px;
+  transition: color 0.1s ease;
+}
+.learn-more:hover {
+  color: var(--green);
 }
 
 .error {

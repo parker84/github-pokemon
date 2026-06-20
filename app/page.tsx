@@ -75,7 +75,14 @@ export default function Home() {
 
   return (
     <main className="page">
-      <p className="kicker">GOTTA CATCH &apos;EM ALL</p>
+      <a
+        className="credit"
+        href="https://x.com/parker_brydon"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        BRYDON PARKER PRESENTS
+      </a>
       <h1 className="headline">
         GITHUB
         <br />
@@ -99,10 +106,15 @@ export default function Home() {
         />
       </form>
 
-      <p className="blurb">
-        ENTER ANY GITHUB PROFILE TO MINT A RETRO TRADING CARD — POWER LEVEL,
-        RANK, ELEMENTAL TYPE, AND YOUR TOP LANGUAGES, ALL PULLED LIVE.
-      </p>
+      <p className="blurb">GET YOUR GITHUB POKéMON CARD.</p>
+      <a
+        className="learn-more"
+        href="https://github.com/parker84/github-pokemon"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        LEARN MORE
+      </a>
 
       {error && <div className="error">⚠ {error}</div>}
 
