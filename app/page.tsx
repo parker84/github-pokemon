@@ -1,11 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Card } from "@/components/Card";
 import { Leaderboard } from "@/components/Leaderboard";
 import { LoadingSequence } from "@/components/LoadingSequence";
 import { ResultView } from "@/components/ResultView";
-import { SAMPLE_CARD } from "@/lib/sample";
 import type { CardData } from "@/lib/types";
 
 type Phase = "idle" | "loading" | "result";
@@ -116,7 +114,7 @@ export default function Home() {
         POKéMON
       </h1>
 
-      <p className="blurb">DISCOVER YOUR GITHUB POKéMON</p>
+      <p className="blurb">GET YOUR GITHUB POKéMON CARD</p>
 
       <form
         className="search"
@@ -139,20 +137,6 @@ export default function Home() {
       </form>
 
       {error && <div className="error">⚠ {error}</div>}
-
-      <section className="example">
-        <p className="example-label">— EXAMPLE CARD —</p>
-        <div
-          className="example-card"
-          role="button"
-          tabIndex={0}
-          onClick={() => generate("torvalds")}
-          onKeyDown={(e) => e.key === "Enter" && generate("torvalds")}
-          title="Generate this card"
-        >
-          <Card data={SAMPLE_CARD} />
-        </div>
-      </section>
 
       <Leaderboard onPick={generate} />
     </main>

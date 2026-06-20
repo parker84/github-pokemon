@@ -141,28 +141,6 @@ body {
   text-shadow: 0 0 8px rgba(219, 97, 162, 0.5);
 }
 
-/* ---------- example card ---------- */
-.example {
-  margin-top: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.example-label {
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--text-dim);
-  margin-bottom: 18px;
-}
-.example-card {
-  cursor: pointer;
-  transition: transform 0.1s ease, filter 0.1s ease;
-}
-.example-card:hover {
-  transform: translateY(-4px);
-  filter: drop-shadow(0 0 20px rgba(57, 211, 83, 0.35));
-}
-
 /* ---------- leaderboard ---------- */
 .leaderboard {
   width: 100%;
@@ -470,16 +448,6 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   width: min(460px, 100%);
-}
-.result-actions.secondary {
-  margin-top: 12px;
-}
-.btn.share-x {
-  background: #000;
-  border-color: var(--text);
-}
-.btn.share-x:hover {
-  background: #15191f;
 }
 .result-actions .btn {
   flex: 1 1 0;
