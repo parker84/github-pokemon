@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import { toPng } from "html-to-image";
 import type { CardData } from "@/lib/types";
 import { Card } from "./Card";
-import { ProfileSections } from "./ProfileSections";
 
 export function ResultView({
   data,
@@ -80,18 +79,16 @@ export function ResultView({
       </p>
 
       <div className="result-actions">
-        <button className="btn" onClick={copyLink}>
-          COPY LINK
-        </button>
         <button className="btn" onClick={copyImage}>
           COPY IMAGE
+        </button>
+        <button className="btn" onClick={copyLink}>
+          COPY LINK
         </button>
         <button className="btn" onClick={download}>
           DOWNLOAD
         </button>
       </div>
-
-      <ProfileSections data={data} />
 
       <button className="btn ghost back" onClick={onReset}>
         ← NEW CARD
