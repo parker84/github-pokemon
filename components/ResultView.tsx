@@ -79,11 +79,11 @@ export function ResultView({
       </p>
 
       <div className="result-actions">
-        <button className="btn" onClick={copyLink}>
-          COPY LINK
-        </button>
         <button className="btn" onClick={copyImage}>
           COPY IMAGE
+        </button>
+        <button className="btn" onClick={copyLink}>
+          COPY LINK
         </button>
         <button className="btn" onClick={download}>
           DOWNLOAD
