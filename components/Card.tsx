@@ -8,7 +8,7 @@ const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? "GITHUB-POKEMON";
 
 export const Card = forwardRef<HTMLDivElement, { data: CardData }>(
   function Card({ data }, ref) {
-    const languages = data.languages.slice(0, 3);
+    const languages = data.languages.slice(0, 1);
     const repos = data.topRepos.slice(0, 3);
 
     return (
@@ -47,7 +47,7 @@ export const Card = forwardRef<HTMLDivElement, { data: CardData }>(
 
         {languages.length > 0 && (
           <div className="card-section">
-            <h3 className="card-section-title">TOP LANGUAGES</h3>
+            <h3 className="card-section-title">TOP LANGUAGE</h3>
             <div className="bars">
               {languages.map((lang) => (
                 <Bar
