@@ -400,6 +400,7 @@ body {
   position: relative;
 }
 .bar-fill {
+  display: block;
   height: 100%;
   min-width: 4px;
 }
