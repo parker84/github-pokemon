@@ -1,0 +1,90 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { toPng } from "html-to-image";
+import type { CardData } from "@/lib/types";
+import { Card } from "./Card";
+
+export function ResultView({
+  data,
+  onReset,
+}: {
+  data: CardData;
+  onReset: () => void;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  function flash(msg: string) {
+    setCopied(msg);
+    setTimeout(() => setCopied(null), 1600);
+  }
+
+  async function render(): Promise<string | null> {
+    if (!cardRef.current) return null;
+    return toPng(cardRef.current, {
+      pixelRatio: 3,
+      cacheBust: true,
+      backgroundColor: "#0d1117",
+    });
+  }
+
+  async function download() {
+    const png = await render();
+    if (!png) return;
+    const a = document.createElement("a");
+    a.href = png;
+    a.download = `${data.username}-card.png`;
+    a.click();
+  }
+
+  async function copyImage() {
+    try {
+      const png = await render();
+      if (!png) return;
+      const blob = await (await fetch(png)).blob();
+      await navigator.clipboard.write([
+        new ClipboardItem({ "image/png": blob }),
+      ]);
+      flash("IMAGE COPIED");
+    } catch {
+      flash("COPY FAILED");
+    }
+  }
+
+  async function copyLink() {
+    const link = `${window.location.origin}/?u=${data.username}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      flash("LINK COPIED");
+    } catch {
+      flash("COPY FAILED");
+    }
+  }
+
+  return (
+    <div className="result">
+      <div className="nameplate">
+        <span className="nameplate-text">{data.name.toUpperCase()}</span>
+      </div>
+
+      <Card data={data} ref={cardRef} />
+
+      <div className="result-actions">
+        <button className="btn" onClick={copyLink}>
+          COPY LINK
+        </button>
+        <button className="btn" onClick={copyImage}>
+          COPY IMAGE
+        </button>
+        <button className="btn" onClick={download}>
+          DOWNLOAD
+        </button>
+      </div>
+      <button className="btn ghost back" onClick={onReset}>
+        ← NEW CARD
+      </button>
+      {copied && <div className="toast">{copied}</div>}
+    </div>
+  );
+}
