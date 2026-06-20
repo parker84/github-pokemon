@@ -53,13 +53,32 @@ export function ResultView({
   }
 
   async function copyLink() {
-    const link = `${window.location.origin}/?u=${data.username}`;
     try {
-      await navigator.clipboard.writeText(link);
+      await navigator.clipboard.writeText(shareUrl);
       flash("LINK COPIED");
     } catch {
       flash("COPY FAILED");
     }
+  }
+
+  const shareUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/?u=${data.username}`
+      : "";
+  const shareText = `I'm a ${data.type}-type ${data.className} on GitHub — ${data.power} PWR, top ${100 - data.percentile}%. What's your GitHub Pokémon?`;
+
+  function shareX() {
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      shareText,
+    )}&url=${encodeURIComponent(shareUrl)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  function shareLinkedIn() {
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+      shareUrl,
+    )}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -70,15 +89,27 @@ export function ResultView({
 
       <Card data={data} ref={cardRef} />
 
+      <p className="rank-line">
+        YOU OUTRANK {data.percentile}% OF GITHUB TRAINERS
+      </p>
+
       <div className="result-actions">
-        <button className="btn" onClick={copyLink}>
-          COPY LINK
+        <button className="btn share-x" onClick={shareX}>
+          SHARE ON X
         </button>
-        <button className="btn" onClick={copyImage}>
-          COPY IMAGE
+        <button className="btn" onClick={shareLinkedIn}>
+          LINKEDIN
         </button>
         <button className="btn" onClick={download}>
           DOWNLOAD
+        </button>
+      </div>
+      <div className="result-actions secondary">
+        <button className="btn ghost" onClick={copyImage}>
+          COPY IMAGE
+        </button>
+        <button className="btn ghost" onClick={copyLink}>
+          COPY LINK
         </button>
       </div>
       <button className="btn ghost back" onClick={onReset}>

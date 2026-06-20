@@ -24,6 +24,7 @@ export function LoadingSequence({ query }: { query: string }) {
 
   return (
     <div className="loading">
+      <p className="wild-line">A WILD TRAINER APPEARED!</p>
       <div className="nameplate">
         <span className="nameplate-text">{query.toUpperCase()}</span>
       </div>

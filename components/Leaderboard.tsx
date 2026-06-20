@@ -31,6 +31,9 @@ export function Leaderboard({
   return (
     <section className="leaderboard">
       <h2 className="leaderboard-title">TOP TRAINERS</h2>
+      <p className="leaderboard-sub">
+        PWR = STARS · FOLLOWERS · REPOS · CONTRIBUTIONS
+      </p>
       {error && (
         <p className="leaderboard-note">
           COULDN&apos;T LOAD — GITHUB RATE LIMIT. ADD A GITHUB_TOKEN.
