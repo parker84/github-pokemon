@@ -17,44 +17,69 @@ export default function Home() {
   const [data, setData] = useState<CardData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const generate = useCallback(async (raw: string) => {
-    const value = raw.trim();
-    if (!value) return;
-    setQuery(value);
-    setPhase("loading");
-    setError(null);
+  const generate = useCallback(
+    async (raw: string, opts: { push?: boolean } = {}) => {
+      const value = raw.trim();
+      if (!value) return;
 
-    const started = Date.now();
-    try {
-      const res = await fetch(`/api/card?u=${encodeURIComponent(value)}`);
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error ?? "Something went wrong.");
+      // Push a history entry so the browser back button returns to the landing.
+      if (opts.push !== false) {
+        window.history.pushState(
+          { u: value },
+          "",
+          `/?u=${encodeURIComponent(value)}`,
+        );
+      }
 
-      const wait = Math.max(0, MIN_LOADING_MS - (Date.now() - started));
-      setTimeout(() => {
-        setData(json as CardData);
-        setPhase("result");
-      }, wait);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
-      setPhase("idle");
-    }
-  }, []);
+      setQuery(value);
+      setPhase("loading");
+      setError(null);
 
-  // Deep link: /?u=torvalds auto-generates.
+      const started = Date.now();
+      try {
+        const res = await fetch(`/api/card?u=${encodeURIComponent(value)}`);
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error ?? "Something went wrong.");
+
+        const wait = Math.max(0, MIN_LOADING_MS - (Date.now() - started));
+        setTimeout(() => {
+          setData(json as CardData);
+          setPhase("result");
+        }, wait);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Something went wrong.");
+        setPhase("idle");
+      }
+    },
+    [],
+  );
+
+  // Sync state to the URL on first load and on back/forward navigation.
   useEffect(() => {
-    const u = new URLSearchParams(window.location.search).get("u");
-    if (u) {
-      setInput(u);
-      generate(u);
+    function sync() {
+      const u = new URLSearchParams(window.location.search).get("u");
+      if (u) {
+        setInput(u);
+        generate(u, { push: false });
+      } else {
+        setData(null);
+        setQuery("");
+        setPhase("idle");
+        setError(null);
+      }
     }
+    sync();
+    window.addEventListener("popstate", sync);
+    return () => window.removeEventListener("popstate", sync);
   }, [generate]);
 
   function reset() {
+    window.history.pushState({}, "", "/");
     setData(null);
+    setQuery("");
+    setInput("");
     setPhase("idle");
     setError(null);
-    window.history.replaceState(null, "", "/");
   }
 
   if (phase === "loading") {
