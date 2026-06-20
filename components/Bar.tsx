@@ -1,16 +1,24 @@
-import type { LanguageStat } from "@/lib/types";
-
-export function Bar({ lang }: { lang: LanguageStat }) {
+export function Bar({
+  name,
+  share,
+  color,
+  title,
+}: {
+  name: string;
+  share: number;
+  color: string;
+  title?: string;
+}) {
   return (
-    <div className="bar-row">
-      <span className="lang">{lang.name.toUpperCase()}</span>
+    <div className="bar-row" title={title}>
+      <span className="lang">{name.toUpperCase()}</span>
       <span className="bar-track">
         <span
           className="bar-fill"
           style={{
-            width: `${Math.max(4, Math.round(lang.share * 100))}%`,
-            background: lang.color,
-            boxShadow: `0 0 6px ${lang.color}`,
+            width: `${Math.max(4, Math.round(share * 100))}%`,
+            background: color,
+            boxShadow: `0 0 6px ${color}`,
           }}
         />
       </span>

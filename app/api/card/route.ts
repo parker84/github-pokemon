@@ -3,8 +3,8 @@ import { buildCardData } from "@/lib/card";
 import { GitHubError, parseUsername } from "@/lib/github";
 
 export const runtime = "nodejs";
-// Cache successful cards at the edge for 6h to spare GitHub + Claude.
-export const revalidate = 21600;
+// Cache successful cards briefly to spare GitHub without serving stale stats.
+export const revalidate = 600;
 
 export async function GET(req: NextRequest) {
   const raw = req.nextUrl.searchParams.get("u") ?? "";
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(card, {
       headers: {
         "Cache-Control":
-          "public, s-maxage=21600, stale-while-revalidate=86400",
+          "public, s-maxage=600, stale-while-revalidate=3600",
       },
     });
   } catch (err) {

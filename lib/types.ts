@@ -6,6 +6,17 @@ export interface LanguageStat {
   color: string;
 }
 
+export interface StatBar {
+  /** Display label, e.g. "STARS" */
+  name: string;
+  /** Raw value (for tooltips / future labels) */
+  value: number;
+  /** Bar fill, 0..1 (normalized magnitude) */
+  share: number;
+  /** Hex color (with leading #) */
+  color: string;
+}
+
 export interface CardData {
   /** GitHub login / handle (without @) */
   username: string;
@@ -36,6 +47,9 @@ export interface CardData {
 
   /** Top languages, sorted desc by share, capped to ~10 */
   languages: LanguageStat[];
+
+  /** Varied GitHub stat dimensions rendered as the card's bars */
+  statBars: StatBar[];
 }
 
 export interface RepoSummary {

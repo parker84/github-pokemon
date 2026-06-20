@@ -52,6 +52,8 @@ interface GitHubUser {
   followers: number;
   following: number;
   public_repos: number;
+  public_gists: number;
+  created_at: string;
 }
 
 interface GitHubRepo {
@@ -59,6 +61,7 @@ interface GitHubRepo {
   description: string | null;
   fork: boolean;
   stargazers_count: number;
+  forks_count: number;
   language: string | null;
   languages_url: string;
 }
@@ -85,6 +88,14 @@ export async function fetchGitHubProfile(username: string) {
   const owned = repos.filter((r) => !r.fork);
 
   const totalStars = owned.reduce((sum, r) => sum + r.stargazers_count, 0);
+  const totalForks = owned.reduce((sum, r) => sum + r.forks_count, 0);
+  const topRepoStars = owned.reduce(
+    (max, r) => Math.max(max, r.stargazers_count),
+    0,
+  );
+  const languageCount = new Set(
+    owned.map((r) => r.language).filter(Boolean),
+  ).size;
 
   const topRepos: RepoSummary[] = [...owned]
     .sort((a, b) => b.stargazers_count - a.stargazers_count)
@@ -102,7 +113,16 @@ export async function fetchGitHubProfile(username: string) {
     ? await aggregateLanguagesByBytes(owned)
     : aggregateLanguages(owned);
 
-  return { user, totalStars, topRepos, languages };
+  return {
+    user,
+    totalStars,
+    totalForks,
+    topRepoStars,
+    languageCount,
+    ownedCount: owned.length,
+    topRepos,
+    languages,
+  };
 }
 
 /**

@@ -28,8 +28,14 @@ export const Card = forwardRef<HTMLDivElement, { data: CardData }>(
         </div>
 
         <div className="bars">
-          {data.languages.map((lang) => (
-            <Bar key={lang.name} lang={lang} />
+          {data.statBars.map((stat) => (
+            <Bar
+              key={stat.name}
+              name={stat.name}
+              share={stat.share}
+              color={stat.color}
+              title={`${stat.value.toLocaleString()}`}
+            />
           ))}
         </div>
 
