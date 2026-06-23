@@ -43,19 +43,32 @@ export function ResultView({
     await toPng(node, RENDER_OPTS);
   }
 
+  // Safari's foreignObject export ignores box-shadow blur, turning the avatar's
+  // soft glow into a hard offset green block. Suppress blurred shadows for the
+  // duration of the capture (on-screen styling is untouched).
+  async function capture<T>(fn: (node: HTMLElement) => Promise<T>): Promise<T> {
+    const node = cardRef.current;
+    if (!node) throw new Error("card not mounted");
+    node.classList.add("capturing");
+    try {
+      await warmUp();
+      return await fn(node);
+    } finally {
+      node.classList.remove("capturing");
+    }
+  }
+
   async function renderPng(): Promise<string | null> {
     if (!cardRef.current) return null;
-    await warmUp();
-    return toPng(cardRef.current, RENDER_OPTS);
+    return capture((node) => toPng(node, RENDER_OPTS));
   }
 
   async function renderBlob(): Promise<Blob> {
-    const node = cardRef.current;
-    if (!node) throw new Error("card not mounted");
-    await warmUp();
-    const blob = await toBlob(node, RENDER_OPTS);
-    if (!blob) throw new Error("render produced no image");
-    return blob;
+    return capture(async (node) => {
+      const blob = await toBlob(node, RENDER_OPTS);
+      if (!blob) throw new Error("render produced no image");
+      return blob;
+    });
   }
 
   async function download() {
