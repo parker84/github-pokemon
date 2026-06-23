@@ -1,9 +1,15 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { toPng } from "html-to-image";
+import { toBlob, toPng } from "html-to-image";
 import type { CardData } from "@/lib/types";
 import { Card } from "./Card";
+
+const RENDER_OPTS = {
+  pixelRatio: 3,
+  cacheBust: true,
+  backgroundColor: "#0d1117",
+} as const;
 
 export function ResultView({
   data,
@@ -20,17 +26,40 @@ export function ResultView({
     setTimeout(() => setCopied(null), 1600);
   }
 
-  async function render(): Promise<string | null> {
+  // Safari (esp. iOS) drops the <canvas> avatar and webfonts on the first
+  // rasterization, so wait for fonts and do throwaway warm-up passes before
+  // the capture that actually counts.
+  async function warmUp() {
+    const node = cardRef.current;
+    if (!node) return;
+    if (document.fonts?.ready) {
+      try {
+        await document.fonts.ready;
+      } catch {
+        /* fonts API unavailable — proceed anyway */
+      }
+    }
+    await toPng(node, RENDER_OPTS);
+    await toPng(node, RENDER_OPTS);
+  }
+
+  async function renderPng(): Promise<string | null> {
     if (!cardRef.current) return null;
-    return toPng(cardRef.current, {
-      pixelRatio: 3,
-      cacheBust: true,
-      backgroundColor: "#0d1117",
-    });
+    await warmUp();
+    return toPng(cardRef.current, RENDER_OPTS);
+  }
+
+  async function renderBlob(): Promise<Blob> {
+    const node = cardRef.current;
+    if (!node) throw new Error("card not mounted");
+    await warmUp();
+    const blob = await toBlob(node, RENDER_OPTS);
+    if (!blob) throw new Error("render produced no image");
+    return blob;
   }
 
   async function download() {
-    const png = await render();
+    const png = await renderPng();
     if (!png) return;
     const a = document.createElement("a");
     a.href = png;
@@ -39,12 +68,17 @@ export function ResultView({
   }
 
   async function copyImage() {
+    // iOS Safari only honors clipboard.write inside the gesture window, so the
+    // ClipboardItem must be built with the still-pending blob promise and
+    // written synchronously — never `await` the render before writing.
+    if (typeof ClipboardItem === "undefined" || !navigator.clipboard?.write) {
+      await download();
+      flash("SAVED IMAGE");
+      return;
+    }
     try {
-      const png = await render();
-      if (!png) return;
-      const blob = await (await fetch(png)).blob();
       await navigator.clipboard.write([
-        new ClipboardItem({ "image/png": blob }),
+        new ClipboardItem({ "image/png": renderBlob() }),
       ]);
       flash("IMAGE COPIED");
     } catch {
